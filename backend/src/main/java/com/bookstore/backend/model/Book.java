@@ -13,18 +13,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(
+            name = "book_sequence",
+            sequenceName = "book_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "book_sequence"
+    )
 
-    @Column(name = "bookName")
+    private long id;
     private String bookName;
-    @Column(name = "authorName")
     private String authorName;
-    @Column(name = "quantity")
     private int quantity;
-    @Column(name = "price")
     private double price;
+    private String invoicePath;
 }

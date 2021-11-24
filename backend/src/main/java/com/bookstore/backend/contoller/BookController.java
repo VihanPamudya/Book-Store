@@ -1,12 +1,11 @@
 package com.bookstore.backend.contoller;
 
-import com.bookstore.backend.exception.ResourceNotFoundException;
+
 import com.bookstore.backend.model.Book;
-import com.bookstore.backend.repository.BookRepository;
+import com.bookstore.backend.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,54 +13,65 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/books")
 public class BookController {
+
+    private final BookService bookService;
     @Autowired
-    private BookRepository bookRepository;
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
     public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+        return bookService.getBooks();
     }
 
-    // build create employee REST API
+    // build create book REST API
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return bookRepository.save(book);
+    public void addNewBook(@RequestParam("file") MultipartFile file,
+                           @RequestParam("bookName") String bookName,
+                           @RequestParam("authorName") String authorName,
+                           @RequestParam("quantity") int quantity,
+                           @RequestParam("price") double price){
+        Book book = new Book();
+
+        String path = null;
+
+        if(!file.isEmpty()){
+            path = bookService.uploadInvoice(file);
+        }
+
+        book.setBookName(bookName);
+        book.setAuthorName(authorName);
+        book.setPrice(price);
+        book.setQuantity(quantity);
+        book.setInvoicePath(path);
+
+        bookService.saveBook(book);
     }
 
-    // build get employee by id REST API
-    @GetMapping("{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable long id){
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id:" + id));
-        return ResponseEntity.ok(book);
+    // build update book REST API
+    @PutMapping(path = "{bookId}")
+    public void updateBook(
+            @PathVariable("bookId") Long id,
+            @RequestParam("file")MultipartFile file,
+            @RequestParam("bookName") String bookName,
+            @RequestParam("authorName") String authorName,
+            @RequestParam("quantity") int quantity,
+            @RequestParam("price") double price){
+
+        String path = null;
+
+        if(!file.isEmpty()){
+            path = bookService.uploadInvoice(file);
+        }
+        bookService.updateBook(id, bookName,authorName,price,quantity,path);
     }
 
-    // build update employee REST API
-    @PutMapping("{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable long id,@RequestBody Book bookDetails) {
-        Book updateBook = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id: " + id));
-
-        updateBook.setBookName(bookDetails.getBookName());
-        updateBook.setAuthorName(bookDetails.getAuthorName());
-        updateBook.setPrice(bookDetails.getPrice());
-        updateBook.setQuantity(bookDetails.getQuantity());
-
-        bookRepository.save(updateBook);
-
-        return ResponseEntity.ok(updateBook);
-    }
-
-    // build delete employee REST API
-    @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteBook(@PathVariable long id){
-
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id: " + id));
-
-        bookRepository.delete(book);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
+    // build delete book REST API
+    @DeleteMapping(path = "{bookId}")
+    public void deleteBook(@PathVariable("bookId") Long id){
+        Book book = bookService.getBook(id);
+        bookService.deleteInvoice(book.getInvoicePath());
+        bookService.deleteBook(id);
     }
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BOOK_BASE_REST_API_URL = 'http://localhost:8080/api/v1/books';
+const BOOK_BASE_REST_API_URL = 'http://localhost:8082/api/v1/books';
 
 class BookService{
 
@@ -8,16 +8,16 @@ class BookService{
         return axios.get(BOOK_BASE_REST_API_URL)
     }
 
-    createBook(book){
-        return axios.post(BOOK_BASE_REST_API_URL, book)
+    saveBook(formData){
+        return axios.post(BOOK_BASE_REST_API_URL,formData);
     }
 
     getBookById(bookId){
         return axios.get(BOOK_BASE_REST_API_URL + '/' + bookId);
     }
 
-    updateBook(bookId, book){
-        return axios.put(BOOK_BASE_REST_API_URL + '/' +bookId, book);
+    updateBook(bookId, formData){
+        return axios.put(BOOK_BASE_REST_API_URL + '/' + bookId, formData);
     }
 
     deleteBook(bookId){
