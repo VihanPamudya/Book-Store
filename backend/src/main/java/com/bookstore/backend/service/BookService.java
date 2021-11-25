@@ -21,9 +21,11 @@ import java.util.Properties;
 
 @Service
 public class BookService {
-    private final BookRepository bookRepository;
 
+
+    private final BookRepository bookRepository;
     @Autowired
+
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -32,31 +34,36 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public void saveBook(Book book){
-        bookRepository.save(book);
+    public Book saveBook(Book book){
+        return bookRepository.save(book);
     }
 
-    public void updateBook(Long id, String bookName, String authorName, double price, int quantity, String path){
+    public void updateBook(MultipartFile file, Long id, String bookName, String authorName, double price, int quantity){
+        String path = null;
+
+        if(file!= null && !file.isEmpty()){
+            path = uploadInvoice(file);
+        }
         Book book = bookRepository.findById(id)
                 .orElseThrow(()-> new IllegalStateException("Book with book id " +id+ " not exists!"));
 
-        if(bookName != null && bookName.length() > 0 && !Objects.equals(book.getBookName(), bookName)){
+        if(bookName != null && bookName.length() > 0){
             book.setBookName(bookName);
         }
 
-        if(authorName != null && authorName.length() > 0 && !Objects.equals(book.getAuthorName(), authorName)){
+        if(authorName != null && authorName.length() > 0){
             book.setAuthorName(authorName);
         }
 
-        if(path != null && path.length() > 0 && !Objects.equals(book.getInvoicePath(), path)){
+        if(path != null && path.length() > 0 ){
             book.setInvoicePath(path);
         }
 
-        if(quantity !=0 &&!Objects.equals(book.getQuantity(), quantity)){
+        if(quantity !=0){
             book.setQuantity(quantity);
         }
 
-        if(price !=0 && !Objects.equals(book.getPrice(), price)){
+        if(price !=0){
             book.setPrice(price);
         }
 
@@ -66,9 +73,14 @@ public class BookService {
     public void deleteBook(Long id){
         bookRepository.deleteById(id);
     }
+    public Book getBook(Long id) {
+        Book book=bookRepository.findById(id).orElse(null);
+        if (book != null){
+            return  book;
+        }else{
+            throw new RuntimeException("Book is not found for the id "+id);
+        }
 
-    public Book getBook(Long id){
-        return bookRepository.getById(id);
     }
 
     public String uploadInvoice(MultipartFile file){
@@ -90,4 +102,27 @@ public class BookService {
         file.delete();
     }
 
+    public Book addBook(MultipartFile file, String bookName, String authorName, int quantity, double price) {
+        Book book = new Book();
+
+        String path = null;
+
+        if(!file.isEmpty()){
+            path = uploadInvoice(file);
+        }
+
+        book.setBookName(bookName);
+        book.setAuthorName(authorName);
+        book.setPrice(price);
+        book.setQuantity(quantity);
+        book.setInvoicePath(path);
+
+       return saveBook(book);
+    }
+
+    public void deleteBookById(Long id) {
+        Book book = getBook(id);
+        deleteInvoice(book.getInvoicePath());
+        deleteBook(id);
+    }
 }

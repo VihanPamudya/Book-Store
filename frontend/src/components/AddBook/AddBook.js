@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,useParams } from 'react-router-dom';
 import BookService from '../../services/BookService'
 import { Form, Button } from 'react-bootstrap'
 
-function AddBook (props){
+function AddBook (){
 
     const [bookName, setBookName] = useState('')
     const [authorName, setAuthorName] = useState('')
@@ -11,34 +11,8 @@ function AddBook (props){
     const [price, setPrice] = useState('')
     const [invoice, setInvoice] = useState();
     const history = useNavigate();
-    const [id,setId]=useState(props.id);
-
-    // const saveOrUpdateEmployee = (e) => {
-    //     e.preventDefault();
-
-    //     const book = { bookName, authorName, quantity, price }
-
-    //     if (id) {
-    //         BookService.updateBook(id, book).then((response) => {
-    //             history('/')
-    //         }).catch(error => {
-    //             console.log(error)
-    //         })
-
-    //     } else {
-    //         BookService.createBook(book).then((response) => {
-
-    //             console.log(response.data)
-
-    //             history('/');
-
-    //         }).catch(error => {
-    //             console.log(error)
-    //         })
-    //     }
-
-    // }
-
+    const { id } = useParams();
+    
     function saveBook(e) {
         e.preventDefault();
         const formData = new FormData();
@@ -85,17 +59,25 @@ function AddBook (props){
     const title = () => {
 
         if (id) {
-            return <h2 className="text-center">Update Employee</h2>
+            return <h2 className="text-center">Update Book</h2>
         } else {
-            return <h2 className="text-center">Add Employee</h2>
+            return <h2 className="text-center">Add Book</h2>
+        }
+    }
+
+    const submitorUpdate=()=>{
+        if(id){
+            return <Button className="btn btn-success" type="submit" onClick={(e)=>saveBook(e)}>Update</Button>
+        }
+        else {
+            return <Button className="btn btn-success" type="submit" onClick={(e)=>saveBook(e)}>Submit</Button>
         }
     }
 
     return (
         <div>
-            <br /><br />
             <div className="container">
-                <h2 className="text-center">{title()}</h2>
+                <h2 className="text-center mt-3">{title()}</h2>
                 <Form>
                     <Form.Group className="mb-3" controlId="bookName">
                         <Form.Label>Book Name :</Form.Label>
@@ -151,9 +133,7 @@ function AddBook (props){
                         />
                     </Form.Group>
 
-                    <Button className="btn btn-success" type="submit" onClick={(e)=>saveBook(e)}>
-                        Submit
-                    </Button>
+                    {submitorUpdate()}
                     <Link to="/" className="btn btn-danger" style={{ marginLeft: "5px" }}> Cancel </Link>
                 </Form>
 

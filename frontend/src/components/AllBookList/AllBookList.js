@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const AllBookList = () => {
 
     const [books, setBooks] = useState([])
-    const [id,setId]=useState(null);
+
 
     useEffect(() => {
         getAllBooks();
@@ -31,8 +31,8 @@ const AllBookList = () => {
     }
     return (
         <div className="container">
-            <h1 className="text-center"> Book List </h1>
-            <Link to="/add-book" className="btn btn-primary mb-2" style={{marginTop:"15px",width:"120px"}} > Add Book </Link>
+            <h1 className="text-center mt-3"> Book List </h1>
+            <Link to="/add-book" className="btn btn-primary mb-2" style={{marginTop:"20px",width:"100px"}} > Add Book </Link>
             <table className="table table-bordered">
                 <thead>
                     <tr className="tr-expand-md tr-dark bg-dark" style={{color:"white", fontSize:"17px",textAlign:"center"}}>
@@ -43,19 +43,21 @@ const AllBookList = () => {
                     <th> Actions </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style={{textAlign:"center"}}>
                     {
                         books.map(
                             book =>
                                 <tr key={book.id}>
-                                    <td> {book.bookName} </td>
-                                    <td> {book.authorName} </td>
-                                    <td>{book.price}</td>
-                                    <td>{book.quantity}</td>
+                                    <td style={{paddingTop:"15px"}}> {book.bookName} </td>
+                                    <td style={{paddingTop:"15px"}}> {book.authorName} </td>
+                                    <td style={{paddingTop:"15px"}}>{book.price}</td>
+                                    <td style={{paddingTop:"15px"}}>{book.quantity}</td>
                                     <td>
-                                        <Link className="btn btn-info" to={`/edit-book/${book.id}`} style={{ marginLeft: "25%" }}>Update</Link>
-                                        <button className="btn btn-danger" onClick={() => deleteBook(book.id)}
-                                            style={{ marginLeft: "10px" }}> Delete</button>
+                                        <Link className="btn btn-primary" to={`/edit-book/${book.id}`} style={{ width:"80px"  }}>Update</Link>
+                                        <Link className="btn btn-primary" to={`/view-book/${book.id}`} style={{ marginLeft: "15px", width:"80px" }}>View</Link>
+                                        <button className="btn btn-primary" onClick={() => deleteBook(book.id)}
+                                            style={{ marginLeft: "15px", width:"80px" }}> Delete</button>
+                                            
                                     </td>
                                 </tr>
                         )
