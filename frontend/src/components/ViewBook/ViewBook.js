@@ -12,6 +12,7 @@ function ViewBook() {
     useEffect(() => {
         BookService.getBookById(id).then((response)=>{
             console.log(response);
+            response.data.invoicePath = "http://localhost:8082/img/"+response.data.invoicePath;
             setBook(response.data);
         })
         .catch(err=>console.log(err))
@@ -41,7 +42,11 @@ function ViewBook() {
                     </tr> 
                     <tr>
                         <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Invoice</td> 
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}><a href={`http://localhost:8082/books/invoice/${id}`} class="btn btn-primary active" aria-current="page">Download Invoice</a></td>
+                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}><a href={book?book.invoicePath:null} class="btn btn-primary active" download="myimage">Download Invoice</a></td>
+                    </tr>  
+                    <tr>
+                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Invoice</td> 
+                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}><img style={{width:"50px",height:"50px"}} src={book?book.invoicePath:null} /></td>
                     </tr>  
 
                 </tbody>
