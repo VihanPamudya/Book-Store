@@ -1,59 +1,54 @@
-import React,{useEffect,useState} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import BookService from '../../services/BookService';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 
 function ViewBook() {
     const [book, setBook] = useState();
-  //  const [file, setFile] = useState();
-  const { id } = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
-        BookService.getBookById(id).then((response)=>{
+        BookService.getBookById(id).then((response) => {
             console.log(response);
-            response.data.invoicePath = "http://localhost:8082/img/"+response.data.invoicePath;
+            response.data.invoicePath = "http://localhost:8082/img/" + response.data.invoicePath;
             setBook(response.data);
         })
-        .catch(err=>console.log(err))
+            .catch(err => console.log(err))
     }, [id])
 
 
     return (
         <div className="bv">
             <h1 className="text-center mt-3">Book Details</h1>
-            <table className="table table-bordered" style={{marginTop:"80px"}}>
-                <tbody  style={{color:"black", fontSize:"18px"}}>
+            <table className="table table-bordered" style={{ marginTop: "30px" }}>
+                <tbody style={{ color: "black", fontSize: "18px" }}>
                     <tr>
-                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Book Name</td>
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}>{book?book.bookName:null}</td>
+                        <td className="tb" style={{ paddingTop: "10px", paddingBottom: "10px", fontWeight: "bold" }}>Book Name :</td>
+                        <td style={{ paddingTop: "10px", paddingBottom: "10px" }}>{book ? book.bookName : null}</td>
                     </tr>
                     <tr>
-                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Author</td>
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}>{book?book.authorName:null}</td>
+                        <td className="tb" style={{ paddingTop: "10px", paddingBottom: "10px", fontWeight: "bold" }}>Author :</td>
+                        <td style={{ paddingTop: "10px", paddingBottom: "10px" }}>{book ? book.authorName : null}</td>
                     </tr>
                     <tr>
-                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Price</td>
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}>{book?book.price:null}</td>
+                        <td className="tb" style={{ paddingTop: "10px", paddingBottom: "10px", fontWeight: "bold" }}>Price :</td>
+                        <td style={{ paddingTop: "10px", paddingBottom: "10px" }}>{book ? book.price : null}</td>
                     </tr>
                     <tr>
-                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Quantity</td>
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}>{book?book.quantity:null}</td>
-                    </tr> 
+                        <td className="tb" style={{ paddingTop: "10px", paddingBottom: "10px", fontWeight: "bold" }}>Quantity :</td>
+                        <td style={{ paddingTop: "10px", paddingBottom: "10px" }}>{book ? book.quantity : null}</td>
+                    </tr>
                     <tr>
-                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Invoice</td> 
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}><a href={book?book.invoicePath:null} class="btn btn-primary active" download="myimage">Download Invoice</a></td>
-                    </tr>  
-                    <tr>
-                        <td className="tb" style={{paddingTop:"10px", paddingBottom:"10px" ,fontWeight:"bold"}}>Invoice</td> 
-                        <td style={{paddingTop:"10px", paddingBottom:"10px"}}><img style={{width:"50px",height:"50px"}} src={book?book.invoicePath:null} /></td>
-                    </tr>  
-
+                        <td className="tb" style={{ paddingTop: "10px", paddingBottom: "10px", fontWeight: "bold" }}>Invoice :</td>
+                        <td><a href={book ? book.invoicePath : null}><img alt="invoice" style={{ width: "200px", height: "200px" }} src={book ? book.invoicePath : null} /></a></td>
+                    </tr>
                 </tbody>
 
             </table>
-            <Link to="/" className="btn btn-danger" style={{ width:"80px" }}> Back </Link>
-            
+            <Link to="/" className="btn btn-danger" style={{ width: "100px" }}> Back </Link>
+            <a style={{ marginLeft: "10px" }} href={book ? book.invoicePath : null} class="btn btn-success active" download>Download Invoice</a>
+
         </div>
     )
 }

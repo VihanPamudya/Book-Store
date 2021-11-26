@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate,useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import BookService from '../../services/BookService'
 import { Form, Button } from 'react-bootstrap'
 
-function AddBook (){
+function AddBook() {
 
     const [bookName, setBookName] = useState('')
     const [authorName, setAuthorName] = useState('')
@@ -12,7 +12,7 @@ function AddBook (){
     const [invoice, setInvoice] = useState();
     const history = useNavigate();
     const { id } = useParams();
-    
+
     function saveBook(e) {
         e.preventDefault();
         const formData = new FormData();
@@ -22,7 +22,7 @@ function AddBook (){
         formData.append("quantity", quantity);
         formData.append("file", invoice);
 
-        
+
         if (id) {
             BookService.updateBook(id, formData).then((response) => {
                 history('/')
@@ -30,7 +30,7 @@ function AddBook (){
                 console.log(error)
             })
 
-        }else{
+        } else {
             BookService.saveBook(formData).then((response) => {
                 console.log(response.data);
                 history('/');
@@ -65,12 +65,12 @@ function AddBook (){
         }
     }
 
-    const submitorUpdate=()=>{
-        if(id){
-            return <Button className="btn btn-success" type="submit" onClick={(e)=>saveBook(e)}>Update</Button>
+    const submitorUpdate = () => {
+        if (id) {
+            return <Button className="btn btn-success" style={{width:"100px"}} type="submit" onClick={(e) => saveBook(e)}>Update</Button>
         }
         else {
-            return <Button className="btn btn-success" type="submit" onClick={(e)=>saveBook(e)}>Submit</Button>
+            return <Button className="btn btn-success" style={{width:"100px"}} type="submit" onClick={(e) => saveBook(e)}>Submit</Button>
         }
     }
 
@@ -78,6 +78,7 @@ function AddBook (){
         <div>
             <div className="container">
                 <h2 className="text-center mt-3">{title()}</h2>
+                <br />
                 <Form>
                     <Form.Group className="mb-3" controlId="bookName">
                         <Form.Label>Book Name :</Form.Label>
@@ -126,15 +127,16 @@ function AddBook (){
 
                     <Form.Group controlId="invoice" className="mb-3">
                         <Form.Label>Upload the Invoice :</Form.Label>
-                        <Form.Control 
-                            type="file" 
+                        <Form.Control
+                            type="file"
                             name="file"
-                            onChange={(e)=>setInvoice(e.target.files[0])}
+                            onChange={(e) => setInvoice(e.target.files[0])}
                         />
                     </Form.Group>
 
+                    <Link to="/" className="btn btn-danger" style={{ marginRight: "10px",width:"100px" }}> Cancel </Link>
                     {submitorUpdate()}
-                    <Link to="/" className="btn btn-danger" style={{ marginLeft: "5px" }}> Cancel </Link>
+
                 </Form>
 
             </div>

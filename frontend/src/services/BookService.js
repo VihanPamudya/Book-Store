@@ -2,25 +2,25 @@ import axios from 'axios'
 
 const BOOK_BASE_REST_API_URL = 'http://localhost:8082/api/v1/books';
 
-class BookService{
+class BookService {
 
-    getAllBooks(){
+    getAllBooks() {
         return axios.get(BOOK_BASE_REST_API_URL)
     }
 
-    saveBook(formData){
-        return axios.post(BOOK_BASE_REST_API_URL,formData);
+    saveBook(formData) {
+        return axios.post(BOOK_BASE_REST_API_URL, formData);
     }
 
-    getBookById(bookId){
+    getBookById(bookId) {
         return axios.get(BOOK_BASE_REST_API_URL + '/' + bookId);
     }
 
-    updateBook(bookId, formData){
+    updateBook(bookId, formData) {
         return axios.put(BOOK_BASE_REST_API_URL + '/' + bookId, formData);
     }
 
-    deleteBook(bookId){
+    deleteBook(bookId) {
         return axios.delete(BOOK_BASE_REST_API_URL + '/' + bookId);
     }
 }
