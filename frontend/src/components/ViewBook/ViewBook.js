@@ -41,7 +41,7 @@ function ViewBook() {
                     </tr>
                     <tr>
                         <td className="tb" style={{ paddingTop: "10px", paddingBottom: "10px", fontWeight: "bold" }}>Invoice :</td>
-                        <td><a href={book ? book.invoicePath : null}><img alt="invoice" style={{ width: "200px", height: "200px" }} src={book ? book.invoicePath : null} /></a></td>
+                        <td><a href={book ? book.invoicePath : null}><img alt="invoice" style={{ width: "200px", height: "200px" ,border:"2px solid black" }} src={book ? book.invoicePath : null} /></a></td>
                     </tr>
                 </tbody>
 
