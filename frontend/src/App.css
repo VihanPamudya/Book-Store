@@ -7,3 +7,8 @@
   text-align: center;
   color: white;
 }
+
+.dc{
+  max-width: 100% !important;
+  position: relative;
+}

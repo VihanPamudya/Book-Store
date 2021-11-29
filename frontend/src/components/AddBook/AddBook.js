@@ -9,18 +9,18 @@ function AddBook() {
     const [authorName, setAuthorName] = useState('')
     const [quantity, setQuantity] = useState('')
     const [price, setPrice] = useState('')
-    const [invoice, setInvoice] = useState();
+    const [invoicePath, setInvoicePath] = useState();
     const history = useNavigate();
     const { id } = useParams();
 
-    function saveBook(e) {
+    function saveorUpdate(e) {
         e.preventDefault();
         const formData = new FormData();
         formData.append("bookName", bookName);
         formData.append("authorName", authorName);
         formData.append("price", price);
         formData.append("quantity", quantity);
-        formData.append("file", invoice);
+        formData.append("file", invoicePath);
 
 
         if (id) {
@@ -50,7 +50,7 @@ function AddBook() {
             setAuthorName(response.data.authorName)
             setQuantity(response.data.quantity)
             setPrice(response.data.price)
-            setInvoice(response.data.file)
+            setInvoicePath(response.data.file)
         }).catch(error => {
             console.log(error)
         })
@@ -67,10 +67,10 @@ function AddBook() {
 
     const submitorUpdate = () => {
         if (id) {
-            return <Button className="btn btn-success" style={{width:"100px"}} type="submit" onClick={(e) => saveBook(e)}>Update</Button>
+            return <Button className="btn btn-success" style={{width:"100px"}} type="submit" onClick={(e) => saveorUpdate(e)}>Update</Button>
         }
         else {
-            return <Button className="btn btn-success" style={{width:"100px"}} type="submit" onClick={(e) => saveBook(e)}>Submit</Button>
+            return <Button className="btn btn-success" style={{width:"100px"}} type="submit" onClick={(e) => saveorUpdate(e)}>Submit</Button>
         }
     }
 
@@ -130,7 +130,7 @@ function AddBook() {
                         <Form.Control
                             type="file"
                             name="file"
-                            onChange={(e) => setInvoice(e.target.files[0])}
+                            onChange={(e) => setInvoicePath(e.target.files[0])}
                         />
                     </Form.Group>
 
