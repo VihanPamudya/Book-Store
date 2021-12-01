@@ -11,13 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-//@RequestMapping("api/v1/books")
-@RequestMapping(path = "books")
+@RequestMapping(path = "api/v1/books")
 public class BookController {
 
     private final BookService bookService;
@@ -29,7 +27,7 @@ public class BookController {
 
     @GetMapping
     public List<Book> getAllBooks() {
-        return bookService.getBooks();
+        return bookService.getAllBooks();
     }
 
     @GetMapping(path = "{id}")
@@ -46,34 +44,33 @@ public class BookController {
                 .body(file);
     }
 
-    // build create book REST API
+    // build create a book
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void addNewBook(@RequestParam("file") MultipartFile file,
                            @RequestParam("bookName") String bookName,
                            @RequestParam("authorName") String authorName,
                            @RequestParam("quantity") int quantity,
-                           @RequestParam("price") Double price) throws IOException {
+                           @RequestParam("price") Double price) {
 
-        bookService.addBook(file, bookName, authorName, quantity, price);
+        bookService.addNewBook(file, bookName, authorName, quantity, price);
 
     }
 
-    // build update book REST API
-    @PutMapping(path = "{bookId}")
+    // build update book
+    @PutMapping(path = "{id}")
     public void updateBook(
-            @PathVariable(name = "bookId") Long bookId,
+            @PathVariable(name = "id") Long id,
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam(name = "bookName", required = false) String bookName,
             @RequestParam(name = "authorName", required = false) String authorName,
             @RequestParam(name = "quantity", required = false) int quantity,
             @RequestParam(name = "price", required = false) Double price) {
-        bookService.updateBook(file, bookId, bookName, authorName, price, quantity);
+        bookService.updateBook(file, id, bookName, authorName, price, quantity);
     }
 
-    // build delete book REST API
-    @DeleteMapping(path = "{bookId}")
-    public void deleteBook(@PathVariable("bookId") Long bookId) {
+    // build delete book
+    @DeleteMapping(path = "{id}")
+    public void deleteBook(@PathVariable("id") Long bookId) {
         bookService.deleteBookById(bookId);
-
     }
 }

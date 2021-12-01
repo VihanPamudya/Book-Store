@@ -8,7 +8,15 @@
   color: white;
 }
 
-.dc{
+.view-width-image{
   max-width: 100% !important;
   position: relative;
+}
+
+.view-width-pdf{
+  max-width: 100% !important;
+}
+
+.react-pdf__Page__canvas{
+  max-width: 100%;
 }

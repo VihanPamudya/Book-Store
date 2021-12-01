@@ -12,12 +12,12 @@ function ViewInvoice(props){
 
     function fileType(){
         
-        if(props.fType=='pdf'){
+        if(props.fType==='pdf'){
             return(
             <Document
-                    file={`http://localhost:8082/books/invoice/${props.id}`}
+                    file={`http://localhost:8082/api/v1/books/invoice/${props.id}`}
                     onLoadSuccess={({ numPages })=>setNumPages(numPages)}
-                    className="dc"
+                    className="view-width-pdf"
                 >
                 {Array.apply(null, Array(numPages))
                 .map((x, i)=>i+1)
@@ -26,7 +26,7 @@ function ViewInvoice(props){
             )
         }
         else {
-           return <img src={`http://localhost:8082/books/invoice/${props.id}`} className="dc" />
+           return <img alt="view-imag" src={`http://localhost:8082/api/v1/books/invoice/${props.id}`} className="view-width-image" />
         }
     }
   
@@ -40,7 +40,7 @@ function ViewInvoice(props){
             <Modal.Body>
                 {fileType()}                
             </Modal.Body>
-            <Modal.Footer><a href={`http://localhost:8082/books/invoice/${props.id}`} class="btn btn-success" >Download</a><Button onClick={props.onHide} class="btn btn-danger" style={{backgroundColor:"#dc3545",borderColor:"#dc3545"}} >Cancel</Button></Modal.Footer>
+            <Modal.Footer><a href={`http://localhost:8082/api/v1/books/invoice/${props.id}`} class="btn btn-success" >Download</a><Button onClick={props.onHide} class="btn btn-danger" style={{backgroundColor:"#dc3545",borderColor:"#dc3545"}} >Cancel</Button></Modal.Footer>
         </Modal>
       );
 }
@@ -54,21 +54,20 @@ function ViewBook() {
 
     useEffect(() => {
         BookService.getBookById(id).then((resp)=>{
-            console.log(resp.data);
+            // console.log(resp.data);
             setBook(resp.data);
         })
         .catch(err=>console.log(err))
-    }, [])
+    }, [id])
 
     function fileType(){
-        let fType=book.invoice;
-        console.log(fType);
+        let fType=book.invoicePath.split(".")[1];
         setFType(fType);
     }
 
 
     return (
-        <div className="bv">
+        <div>
             <h1 className="text-center mt-3">Book Details</h1>
             <table className="table table-bordered" style={{ marginTop: "30px" }}>
                 <tbody style={{ color: "black", fontSize: "18px" }}>
